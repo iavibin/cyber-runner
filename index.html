@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cyber Runner // Neon Protocol</title>
+  <!-- Google Fonts for futuristic cyberpunk aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient background glow effect -->
+  <div class="ambient-glow"></div>
+
+  <!-- Main Game Frame -->
+  <div class="game-wrapper">
+    <div id="game-container" class="game-container">
+      <canvas id="gameCanvas"></canvas>
+      
+      <!-- Scanline overlay for retro CRT monitor feel -->
+      <div class="scanlines"></div>
+      <div class="vignette"></div>
+
+      <!-- Live Heads-Up Display (HUD) -->
+      <div id="hud" class="hud">
+        <div class="hud-left">
+          <div class="hud-box score-box">
+            <span class="hud-label">SCORE</span>
+            <span id="score-display" class="hud-value neon-cyan">000000</span>
+          </div>
+          <div class="hud-box dist-box">
+            <span class="hud-label">DISTANCE</span>
+            <span id="dist-display" class="hud-value neon-white">0 m</span>
+          </div>
+          <div class="hud-box multiplier-box">
+            <span class="hud-label">SPEED</span>
+            <span id="speed-display" class="hud-value neon-yellow">1.0x</span>
+          </div>
+        </div>
+
+        <div class="hud-right">
+          <div class="hud-box chips-box">
+            <span class="hud-label">DATA CHIPS</span>
+            <span id="chips-display" class="hud-value neon-gold">⬡ 00</span>
+          </div>
+          <div class="hud-box high-box">
+            <span class="hud-label">RECORD</span>
+            <span id="high-display" class="hud-value neon-pink">HI: 000000</span>
+          </div>
+          <button id="sound-btn" class="hud-btn" title="Toggle Sound / Music" aria-label="Toggle Sound">
+            <span id="sound-icon">🔊</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Action Floating Buttons for Mobile / Touch -->
+      <div id="touch-controls" class="touch-controls">
+        <div id="touch-jump" class="touch-zone touch-jump">
+          <span>▲ JUMP</span>
+        </div>
+        <div id="touch-slide" class="touch-zone touch-slide">
+          <span>▼ SLIDE / DIVE</span>
+        </div>
+      </div>
+
+      <!-- Start / Title Screen Overlay -->
+      <div id="start-screen" class="overlay active">
+        <div class="panel-cyber">
+          <div class="cyber-header">
+            <div class="cyber-badge">SYSTEM PROTOCOL 2088</div>
+            <h1 class="glitch-title" data-text="CYBER RUNNER">CYBER RUNNER</h1>
+            <p class="tagline">HYPERDRIVE DATA RUNNER // SECTOR 07</p>
+          </div>
+
+          <div class="instructions-grid">
+            <div class="instruction-card">
+              <div class="card-icon neon-cyan">▲ / SPACE</div>
+              <div class="card-title">JUMP</div>
+              <div class="card-desc">Leap over ground laser barriers & spiked nodes</div>
+            </div>
+            <div class="instruction-card">
+              <div class="card-icon neon-pink">▼ / S</div>
+              <div class="card-title">SLIDE</div>
+              <div class="card-desc">Slide beneath hovering hunter security drones</div>
+            </div>
+            <div class="instruction-card">
+              <div class="card-icon neon-white">▼ MID-AIR</div>
+              <div class="card-title">FAST DIVE</div>
+              <div class="card-desc">Drop rapidly back to ground to recover quickly</div>
+            </div>
+            <div class="instruction-card">
+              <div class="card-icon neon-gold">⬡ CHIP</div>
+              <div class="card-title">COLLECT</div>
+              <div class="card-desc">Grab golden data chips for bonus points (+150)</div>
+            </div>
+          </div>
+
+          <div class="action-wrap">
+            <button id="start-btn" class="cyber-btn primary-btn">
+              <span class="btn-text">INITIALIZE RUN</span>
+              <span class="btn-glitch"></span>
+            </button>
+            <div class="hint-text">Or press <kbd>SPACEBAR</kbd> to Launch</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game Over Overlay -->
+      <div id="game-over-screen" class="overlay">
+        <div class="panel-cyber game-over-panel">
+          <div class="cyber-header">
+            <div class="cyber-badge danger-badge">TERMINAL MALFUNCTION</div>
+            <h2 class="game-over-title">SYSTEM OFFLINE</h2>
+            <p id="new-high-badge" class="new-high-badge hidden">★ NEW RECORD ACHIEVED ★</p>
+          </div>
+
+          <div class="stats-summary">
+            <div class="stat-row">
+              <span class="stat-label">FINAL SCORE</span>
+              <span id="final-score" class="stat-val neon-cyan">0</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">DISTANCE REACHED</span>
+              <span id="final-distance" class="stat-val neon-white">0 m</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">DATA CHIPS SECURED</span>
+              <span id="final-chips" class="stat-val neon-gold">0</span>
+            </div>
+            <div class="stat-row highlight-row">
+              <span class="stat-label">HIGH SCORE RECORD</span>
+              <span id="final-highscore" class="stat-val neon-pink">0</span>
+            </div>
+          </div>
+
+          <div class="action-wrap">
+            <button id="restart-btn" class="cyber-btn danger-btn">
+              <span class="btn-text">REBOOT SYSTEM</span>
+              <span class="btn-glitch"></span>
+            </button>
+            <div class="hint-text">Or press <kbd>SPACE</kbd> or <kbd>R</kbd> to Reboot</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- External scripts -->
+  <script src="runner.js"></script>
+</body>
+</html>
