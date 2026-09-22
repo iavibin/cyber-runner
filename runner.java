@@ -1,10 +1,10 @@
-/**
- * Cyber Runner - Java Launcher & Desktop Bridge
- * 
- * Note: Cyber Runner is built with HTML5 Canvas, modern JavaScript (runner.js),
- * and CSS (style.css). This Java file provides a native desktop launcher to
- * instantly execute and play the game in your default web browser from any Java IDE or terminal.
- */
+/*
+           Cyber Runner - Java Launcher & Desktop Bridge
+
+Note: Cyber Runner is built with HTML5 Canvas, modern JavaScript (runner.js),
+and CSS (style.css). This Java file provides a native desktop launcher to
+instantly execute and play the game in your default web browser from any Java IDE or terminal.
+*/
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;

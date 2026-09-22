@@ -1,9 +1,3 @@
-/**
- * CYBER RUNNER - Core Game Engine
- * Neon Cyberpunk Endless Arcade Runner
- * HTML5 Canvas, Web Audio API Synthesizer, & Parallax Retro Grid
- */
-
 (function () {
   'use strict';
 
