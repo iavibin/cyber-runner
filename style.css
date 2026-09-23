@@ -4,10 +4,8 @@
   --neon-pink: #ff0055;
   --neon-pink-glow: rgba(255, 0, 85, 0.4);
   --neon-gold: #ffe600;
-  --neon-gold-glow: rgba(255, 230, 0, 0.35);
-  --neon-purple: #9d00ff;
   --bg-dark: #070814;
-  --bg-panel: rgba(10, 14, 28, 0.85);
+  --bg-panel: rgba(10, 14, 28, 0.9);
   --panel-border: rgba(0, 240, 255, 0.4);
   --font-display: 'Orbitron', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-ui: 'Rajdhani', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -76,15 +74,13 @@ html, body {
   width: 100%;
   height: 100%;
   background: #05060f;
+  cursor: pointer;
 }
 
 /* Retro CRT scanlines overlay */
 .scanlines {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
   background: linear-gradient(
     rgba(18, 16, 16, 0) 50%, 
@@ -103,18 +99,13 @@ html, body {
 /* Vignette shadow */
 .vignette {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
   box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.85);
   z-index: 5;
 }
 
-/* ==========================================================================
-   HEADS-UP DISPLAY (HUD)
-   ========================================================================== */
+/* Heads-Up Display (HUD) */
 .hud {
   position: absolute;
   top: 16px;
@@ -130,11 +121,11 @@ html, body {
 .hud-left, .hud-right {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
 .hud-box {
-  background: rgba(8, 12, 26, 0.75);
+  background: rgba(8, 12, 26, 0.78);
   border: 1px solid rgba(0, 240, 255, 0.3);
   backdrop-filter: blur(8px);
   padding: 6px 14px;
@@ -193,32 +184,74 @@ html, body {
   border: 1px solid var(--neon-cyan);
   color: #fff;
   font-size: 1.1rem;
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 4px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
   box-shadow: 0 0 10px var(--neon-cyan-dim);
 }
 
 .hud-btn:hover {
-  background: rgba(0, 240, 255, 0.2);
+  background: rgba(0, 240, 255, 0.22);
   transform: scale(1.06);
-  box-shadow: 0 0 18px var(--neon-cyan);
+  box-shadow: 0 0 16px var(--neon-cyan);
 }
 
-/* ==========================================================================
-   TOUCH CONTROLS (FOR MOBILE / HYBRID)
-   ========================================================================== */
+/* Floating Notification / Score Popups */
+.floating-notifications {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 12;
+  overflow: hidden;
+}
+
+.floating-text {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  pointer-events: none;
+  animation: floatUpFade 0.85s ease-out forwards;
+}
+
+.floating-chip {
+  color: var(--neon-gold);
+  text-shadow: 0 0 10px rgba(255, 230, 0, 0.9);
+}
+
+.floating-nearmiss {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 12px rgba(0, 240, 255, 0.95);
+  font-size: 1.2rem;
+}
+
+@keyframes floatUpFade {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(0.9);
+  }
+  30% {
+    transform: translateY(-16px) scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-45px) scale(1);
+  }
+}
+
+/* Touch controls for mobile / hybrid */
 .touch-controls {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 40%;
+  height: 42%;
   display: flex;
   pointer-events: none;
   z-index: 15;
@@ -229,7 +262,7 @@ html, body {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding-bottom: 20px;
+  padding-bottom: 22px;
   font-family: var(--font-display);
   font-size: 0.85rem;
   font-weight: 700;
@@ -253,16 +286,11 @@ html, body {
   background: rgba(0, 240, 255, 0.08);
 }
 
-/* ==========================================================================
-   OVERLAYS (START SCREEN & GAME OVER)
-   ========================================================================== */
+/* Overlays (Start, Pause & Game Over) */
 .overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(4, 6, 16, 0.85);
+  inset: 0;
+  background: rgba(4, 6, 16, 0.86);
   backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
@@ -270,7 +298,7 @@ html, body {
   z-index: 20;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .overlay.active {
@@ -283,7 +311,7 @@ html, body {
   border: 1px solid var(--panel-border);
   box-shadow: 0 0 35px rgba(0, 240, 255, 0.25), inset 0 0 30px rgba(0, 240, 255, 0.05);
   border-radius: 8px;
-  padding: 36px 44px;
+  padding: 34px 42px;
   max-width: 680px;
   width: 90%;
   text-align: center;
@@ -294,7 +322,7 @@ html, body {
     100% calc(100% - 16px), calc(100% - 16px) 100%, 
     16px 100%, 0 calc(100% - 16px)
   );
-  animation: panelEntry 0.4s ease-out;
+  animation: panelEntry 0.35s ease-out;
 }
 
 @keyframes panelEntry {
@@ -309,7 +337,7 @@ html, body {
 }
 
 .cyber-header {
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 .cyber-badge {
@@ -332,7 +360,6 @@ html, body {
   border-color: rgba(255, 0, 85, 0.4);
 }
 
-/* Glitch Title Animation */
 .glitch-title {
   font-family: var(--font-display);
   font-size: 3.2rem;
@@ -346,6 +373,16 @@ html, body {
     -2px -2px 0px #00e5ff;
   margin-bottom: 8px;
   line-height: 1.1;
+}
+
+.pause-title {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 20px rgba(0, 240, 255, 0.6), 2px 2px 0px #fff;
+  margin-bottom: 6px;
 }
 
 .game-over-title {
@@ -389,7 +426,7 @@ html, body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-  margin-bottom: 28px;
+  margin-bottom: 26px;
   text-align: left;
 }
 
@@ -415,7 +452,7 @@ html, body {
 
 .card-title {
   font-family: var(--font-display);
-  font-size: 1rem;
+  font-size: 0.98rem;
   font-weight: 700;
   color: #f8fafc;
   margin-bottom: 2px;
@@ -433,7 +470,7 @@ html, body {
   border: 1px solid rgba(255, 0, 85, 0.25);
   border-radius: 6px;
   padding: 14px 20px;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -465,7 +502,7 @@ html, body {
   font-weight: 800;
 }
 
-/* Cyber Buttons */
+/* Cyber Action Buttons */
 .action-wrap {
   display: flex;
   flex-direction: column;
@@ -485,7 +522,7 @@ html, body {
   cursor: pointer;
   border: none;
   outline: none;
-  transition: all 0.2s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
   clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
 }
 
@@ -537,6 +574,9 @@ kbd {
 @media (max-width: 768px) {
   .glitch-title {
     font-size: 2.2rem;
+  }
+  .pause-title {
+    font-size: 2rem;
   }
   .panel-cyber {
     padding: 24px 20px;

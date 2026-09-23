@@ -4,65 +4,64 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Cyber Runner // Neon Protocol</title>
-  <!-- Google Fonts for futuristic cyberpunk aesthetic -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Ambient background glow effect -->
   <div class="ambient-glow"></div>
 
-  <!-- Main Game Frame -->
   <div class="game-wrapper">
     <div id="game-container" class="game-container">
       <canvas id="gameCanvas"></canvas>
       
-      <!-- Scanline overlay for retro CRT monitor feel -->
+      <!-- Retro CRT scanline & vignette overlays -->
       <div class="scanlines"></div>
       <div class="vignette"></div>
 
       <!-- Live Heads-Up Display (HUD) -->
       <div id="hud" class="hud">
         <div class="hud-left">
-          <div class="hud-box score-box">
+          <div class="hud-box">
             <span class="hud-label">SCORE</span>
             <span id="score-display" class="hud-value neon-cyan">000000</span>
           </div>
-          <div class="hud-box dist-box">
+          <div class="hud-box">
             <span class="hud-label">DISTANCE</span>
             <span id="dist-display" class="hud-value neon-white">0 m</span>
           </div>
-          <div class="hud-box multiplier-box">
+          <div class="hud-box">
             <span class="hud-label">SPEED</span>
             <span id="speed-display" class="hud-value neon-yellow">1.0x</span>
           </div>
         </div>
 
         <div class="hud-right">
-          <div class="hud-box chips-box">
+          <div class="hud-box">
             <span class="hud-label">DATA CHIPS</span>
             <span id="chips-display" class="hud-value neon-gold">⬡ 00</span>
           </div>
-          <div class="hud-box high-box">
+          <div class="hud-box">
             <span class="hud-label">RECORD</span>
             <span id="high-display" class="hud-value neon-pink">HI: 000000</span>
           </div>
-          <button id="sound-btn" class="hud-btn" title="Toggle Sound / Music" aria-label="Toggle Sound">
+          <button id="pause-btn" class="hud-btn" title="Pause Game [P]" aria-label="Pause Game">
+            <span id="pause-icon">⏸</span>
+          </button>
+          <button id="sound-btn" class="hud-btn" title="Toggle Audio [M]" aria-label="Toggle Sound">
             <span id="sound-icon">🔊</span>
           </button>
         </div>
       </div>
 
-      <!-- Quick Action Floating Buttons for Mobile / Touch -->
+      <!-- Floating floating notification / score text container -->
+      <div id="floating-notifications" class="floating-notifications"></div>
+
+      <!-- Quick Action Touch Zones for Mobile / Hybrid Devices -->
       <div id="touch-controls" class="touch-controls">
-        <div id="touch-jump" class="touch-zone touch-jump">
-          <span>▲ JUMP</span>
-        </div>
-        <div id="touch-slide" class="touch-zone touch-slide">
-          <span>▼ SLIDE / DIVE</span>
-        </div>
+        <div id="touch-jump" class="touch-zone touch-jump">▲ JUMP</div>
+        <div id="touch-slide" class="touch-zone touch-slide">▼ SLIDE / DIVE</div>
       </div>
 
       <!-- Start / Title Screen Overlay -->
@@ -70,13 +69,13 @@
         <div class="panel-cyber">
           <div class="cyber-header">
             <div class="cyber-badge">SYSTEM PROTOCOL 2088</div>
-            <h1 class="glitch-title" data-text="CYBER RUNNER">CYBER RUNNER</h1>
+            <h1 class="glitch-title">CYBER RUNNER</h1>
             <p class="tagline">HYPERDRIVE DATA RUNNER // SECTOR 07</p>
           </div>
 
           <div class="instructions-grid">
             <div class="instruction-card">
-              <div class="card-icon neon-cyan">▲ / SPACE</div>
+              <div class="card-icon neon-cyan">▲ / SPACE / CLICK</div>
               <div class="card-title">JUMP</div>
               <div class="card-desc">Leap over ground laser barriers & spiked nodes</div>
             </div>
@@ -91,25 +90,36 @@
               <div class="card-desc">Drop rapidly back to ground to recover quickly</div>
             </div>
             <div class="instruction-card">
-              <div class="card-icon neon-gold">⬡ CHIP</div>
-              <div class="card-title">COLLECT</div>
-              <div class="card-desc">Grab golden data chips for bonus points (+150)</div>
+              <div class="card-icon neon-gold">⬡ CHIP / CLOSE CALL</div>
+              <div class="card-title">COLLECT & COMBO</div>
+              <div class="card-desc">Grab chips (+150) and execute near-misses (+50)</div>
             </div>
           </div>
 
           <div class="action-wrap">
-            <button id="start-btn" class="cyber-btn primary-btn">
-              <span class="btn-text">INITIALIZE RUN</span>
-              <span class="btn-glitch"></span>
-            </button>
-            <div class="hint-text">Or press <kbd>SPACEBAR</kbd> to Launch</div>
+            <button id="start-btn" class="cyber-btn primary-btn">INITIALIZE RUN</button>
+            <div class="hint-text">Press <kbd>SPACEBAR</kbd> to Launch • <kbd>P</kbd> to Pause</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pause Screen Overlay -->
+      <div id="pause-screen" class="overlay">
+        <div class="panel-cyber">
+          <div class="cyber-header">
+            <div class="cyber-badge">SUBSYSTEM SUSPENDED</div>
+            <h2 class="pause-title">GAME PAUSED</h2>
+          </div>
+          <div class="action-wrap">
+            <button id="resume-btn" class="cyber-btn primary-btn">RESUME MISSION</button>
+            <div class="hint-text">Press <kbd>P</kbd> or <kbd>ESC</kbd> to Resume</div>
           </div>
         </div>
       </div>
 
       <!-- Game Over Overlay -->
       <div id="game-over-screen" class="overlay">
-        <div class="panel-cyber game-over-panel">
+        <div class="panel-cyber">
           <div class="cyber-header">
             <div class="cyber-badge danger-badge">TERMINAL MALFUNCTION</div>
             <h2 class="game-over-title">SYSTEM OFFLINE</h2>
@@ -136,11 +146,8 @@
           </div>
 
           <div class="action-wrap">
-            <button id="restart-btn" class="cyber-btn danger-btn">
-              <span class="btn-text">REBOOT SYSTEM</span>
-              <span class="btn-glitch"></span>
-            </button>
-            <div class="hint-text">Or press <kbd>SPACE</kbd> or <kbd>R</kbd> to Reboot</div>
+            <button id="restart-btn" class="cyber-btn danger-btn">REBOOT SYSTEM</button>
+            <div class="hint-text">Press <kbd>SPACE</kbd> or <kbd>R</kbd> to Reboot</div>
           </div>
         </div>
       </div>
@@ -148,7 +155,6 @@
     </div>
   </div>
 
-  <!-- External scripts -->
   <script src="runner.js"></script>
 </body>
 </html>
